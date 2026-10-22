@@ -15,6 +15,9 @@ frame-encode.workspace = true
 # Exact-pinned EBML/block primitives for the bounded video path (ADR 0012).
 mkwriter = "=0.1.0"
 
+[target.'cfg(windows)'.dependencies]
+tempfile = { version = "=3.27.0", default-features = false }
+
 [dev-dependencies]
 serde_json.workspace = true
 

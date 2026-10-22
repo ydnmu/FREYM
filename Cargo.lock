@@ -2048,6 +2048,7 @@ dependencies = [
  "frame-metadata",
  "mkwriter",
  "serde_json",
+ "tempfile",
 ]
 
 [[package]]

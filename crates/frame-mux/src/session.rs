@@ -1200,14 +1200,12 @@ fn atomic_store_bytes(path: &Path, bytes: &[u8], generation: u64, replace: bool)
                 )
             })?;
         } else {
-            // hard_link is atomic exclusive publication; no existing manifest overwrite.
-            fs::hard_link(&temp, path).map_err(|error| {
+            publish_initial(&temp, path).map_err(|error| {
                 io::Error::new(
                     error.kind(),
                     format!("Exclusive manifest publication: {error}"),
                 )
             })?;
-            fs::remove_file(&temp)?;
         }
         sync_directory(path.parent().expect("validated parent"))
     })();
@@ -1215,6 +1213,21 @@ fn atomic_store_bytes(path: &Path, bytes: &[u8], generation: u64, replace: bool)
         let _ = fs::remove_file(&temp);
     }
     result
+}
+
+#[cfg(windows)]
+fn publish_initial(temp: &Path, path: &Path) -> io::Result<()> {
+    // MoveFileExW without REPLACE_EXISTING avoids the hard-link/unlink sequence
+    // while refusing a destination created after the caller's existence check.
+    tempfile::TempPath::try_from_path(temp)?
+        .persist_noclobber(path)
+        .map_err(|error| error.error)
+}
+
+#[cfg(not(windows))]
+fn publish_initial(temp: &Path, path: &Path) -> io::Result<()> {
+    fs::hard_link(temp, path)?;
+    fs::remove_file(temp)
 }
 
 #[cfg(not(windows))]
@@ -1314,6 +1327,74 @@ fn session_error(error: io::Error) -> RecorderError {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    fn publication_directory(label: &str) -> PathBuf {
+        let directory = std::env::temp_dir().join(format!(
+            "freym-publication-{label}-{}-{}",
+            std::process::id(),
+            std::time::SystemTime::now()
+                .duration_since(std::time::UNIX_EPOCH)
+                .unwrap()
+                .as_nanos()
+        ));
+        fs::create_dir(&directory).unwrap();
+        directory
+    }
+
+    #[test]
+    fn initial_publication_preserves_an_existing_destination() {
+        let directory = publication_directory("existing");
+        let path = directory.join("session");
+        fs::write(&path, b"other owner").unwrap();
+        let error = atomic_store_bytes(&path, b"candidate", 0, false).unwrap_err();
+        assert_eq!(error.kind(), io::ErrorKind::AlreadyExists);
+        assert_eq!(fs::read(&path).unwrap(), b"other owner");
+        assert_eq!(fs::read_dir(&directory).unwrap().count(), 1);
+    }
+
+    #[test]
+    fn concurrent_initial_publication_has_one_complete_winner() {
+        let directory = publication_directory("race");
+        let path = directory.join("session");
+        let barrier = std::sync::Barrier::new(2);
+        let first = vec![0x51; 64 * 1024];
+        let second = vec![0xa2; 64 * 1024];
+        let results = std::thread::scope(|scope| {
+            let spawn = |bytes, generation| {
+                let path = &path;
+                let barrier = &barrier;
+                scope.spawn(move || {
+                    barrier.wait();
+                    atomic_store_bytes(path, bytes, generation, false)
+                })
+            };
+            let left = spawn(first.as_slice(), 0);
+            let right = spawn(second.as_slice(), 1);
+            [left.join().unwrap(), right.join().unwrap()]
+        });
+        assert_eq!(results.iter().filter(|result| result.is_ok()).count(), 1);
+        let loser = results
+            .iter()
+            .find_map(|result| result.as_ref().err())
+            .unwrap();
+        assert_eq!(loser.kind(), io::ErrorKind::AlreadyExists);
+        let winner = fs::read(&path).unwrap();
+        assert!(winner == first || winner == second);
+        assert_eq!(fs::read_dir(&directory).unwrap().count(), 1);
+    }
+
+    #[cfg(windows)]
+    #[test]
+    fn initial_publication_allows_an_immediate_first_checkpoint() {
+        let directory = publication_directory("checkpoint");
+        for index in 0..16 {
+            let path = directory.join(format!("session-{index}"));
+            atomic_store_bytes(&path, b"initial", 0, false).unwrap();
+            atomic_store_bytes(&path, b"checkpoint", 1, true).unwrap();
+            assert_eq!(fs::read(&path).unwrap(), b"checkpoint");
+        }
+        assert_eq!(fs::read_dir(&directory).unwrap().count(), 16);
+    }
 
     #[cfg(windows)]
     #[test]
