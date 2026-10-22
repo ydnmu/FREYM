@@ -17,7 +17,7 @@ fn main() {
                         ..Default::default()
                     }),
                     window_min_size: Some(size(px(Layout::MIN_WINDOW_WIDTH), px(740.))),
-                    app_id: Some("dev.frame.recorder.ui-preview".into()),
+                    app_id: Some(format!("{}.ui-preview", freym_update::identity::APP_ID)),
                     ..Default::default()
                 },
                 |window, cx| cx.new(|cx| PreviewWorkbench::new(window, cx)),

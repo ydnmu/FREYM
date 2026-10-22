@@ -322,9 +322,13 @@ fn default_enabled() -> bool {
 }
 
 pub fn preference_enabled() -> Result<bool> {
-    let path = dirs_next::config_dir()
+    preference_enabled_in(crate::identity::config_dir())
+}
+
+fn preference_enabled_in(config: Option<PathBuf>) -> Result<bool> {
+    let path = config
         .context("User settings directory is unavailable")?
-        .join("dev.frame.recorder/native-ui.json");
+        .join("native-ui.json");
     match std::fs::read(path) {
         Ok(bytes) => Ok(serde_json::from_slice::<UpdatePreference>(&bytes)?.automatic_updates),
         Err(e) if e.kind() == std::io::ErrorKind::NotFound => Ok(true),
@@ -382,6 +386,20 @@ mod tests {
         updater.set_enabled(true);
         assert!(updater.due());
     }
+    #[test]
+    fn unavailable_settings_directory_keeps_launcher_updates_disabled() {
+        let result = preference_enabled_in(None);
+        assert!(result.is_err());
+        assert!(!result.unwrap_or(false));
+        let directory = tempfile::tempdir().unwrap();
+        std::fs::write(
+            directory.path().join("native-ui.json"),
+            br#"{"automatic_updates":false}"#,
+        )
+        .unwrap();
+        assert!(!preference_enabled_in(Some(directory.path().to_owned())).unwrap());
+    }
+
     #[test]
     fn old_native_preferences_default_to_enabled_and_explicit_false_survives() {
         let old: UpdatePreference =

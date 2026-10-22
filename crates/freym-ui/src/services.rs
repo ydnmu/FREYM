@@ -128,9 +128,8 @@ impl Services {
             warnings: Mutex::new(Vec::new()),
             replay_save_finished: AtomicBool::new(false),
         });
-        let config = dirs_next::config_dir()
-            .unwrap_or_else(|| PathBuf::from("."))
-            .join("dev.frame.recorder");
+        let config = freym_update::identity::config_dir()
+            .unwrap_or_else(|| PathBuf::from(".").join("dev.frame.recorder"));
         let store = SettingsStore::in_directory(&config);
         (
             Arc::new(Self {

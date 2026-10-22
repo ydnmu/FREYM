@@ -88,7 +88,7 @@ fn floating_options(bounds: Bounds<Pixels>, display: Option<gpui::DisplayId>) ->
         is_resizable: false,
         is_minimizable: false,
         display_id: display,
-        app_id: Some("dev.frame.recorder".into()),
+        app_id: Some(freym_update::identity::APP_ID.into()),
         ..Default::default()
     }
 }

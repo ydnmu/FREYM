@@ -1,5 +1,6 @@
 //! Application updates only. Trust is compiled into the application, never supplied
 //! by a feed, preferences, environment variable or downloaded executable.
+pub mod identity;
 pub mod install;
 mod manifest;
 pub mod platform;

@@ -35,6 +35,7 @@ fn main() {
     gpui_platform::application()
         .with_assets(freym_ui::Assets)
         .run(|cx: &mut App| {
+            cx.set_app_identity(freym_update::identity::APP_ID, "FREYM");
             freym_ui::install_fonts(cx).expect("FREYM control fonts could not be loaded");
             let bounds = Bounds::centered(
                 None,
@@ -53,7 +54,7 @@ fn main() {
                         px(Layout::MIN_WINDOW_WIDTH),
                         px(Layout::MIN_WINDOW_HEIGHT),
                     )),
-                    app_id: Some("dev.frame.recorder".into()),
+                    app_id: Some(freym_update::identity::APP_ID.into()),
                     // Embedded child HWND stays below GPUI's composition visual.
                     // Only its viewport is left transparent by RecorderScreen.
                     window_background: gpui::WindowBackgroundAppearance::Transparent,
