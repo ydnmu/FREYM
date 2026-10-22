@@ -1,0 +1,43 @@
+name: Core checks
+on:
+  push:
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  windows:
+    runs-on: windows-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@1.96.0
+        with:
+          components: rustfmt, clippy
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install decoder tools for media fixtures
+        shell: pwsh
+        run: choco install ffmpeg --yes --no-progress
+      - name: Fetch pinned dependencies
+        shell: pwsh
+        run: pwsh -NoProfile -File scripts/run-task.ps1 cargo fetch --locked
+      - name: Formatting
+        run: cargo fmt --all --check
+      - name: Strict Clippy, including preview and examples
+        shell: pwsh
+        run: pwsh -NoProfile -File scripts/run-task.ps1 cargo clippy --locked --workspace --all-targets --all-features --jobs 2 -- -D warnings
+      - name: Portable engine tests
+        shell: pwsh
+        run: pwsh -NoProfile -File scripts/run-task.ps1 cargo test --locked -p frame-audio -p frame-clock -p frame-contracts -p frame-core -p frame-encode -p frame-metadata -p frame-metrics -p frame-mux -p frame-settings -p frame-studio --jobs 2
+      - name: Controller and native UI tests
+        shell: pwsh
+        run: pwsh -NoProfile -File scripts/run-task.ps1 cargo test --locked -p frame-runtime -p freym-ui -p freym-platform -p freym-update --lib --jobs 2
+      - name: Tooling tests
+        run: python -B -m unittest discover -s tests -p "test_*.py"
+      - name: Native application
+        shell: pwsh
+        run: pwsh -NoProfile -File scripts/run-task.ps1 cargo build --locked --release -p freym-app --bin freym -p freym-update --bin freym-launcher --jobs 2
+      - name: Native component lab
+        shell: pwsh
+        run: pwsh -NoProfile -File scripts/run-task.ps1 cargo build --locked --release -p freym-app --features ui-preview --bin freym-ui-preview --jobs 2

@@ -1,0 +1,35 @@
+[package]
+name = "freym-app"
+version.workspace = true
+license.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+publish.workspace = true
+default-run = "freym"
+
+[features]
+ui-preview = ["freym-ui/ui-preview"]
+
+[[bin]]
+name = "freym"
+path = "src/main.rs"
+
+[[bin]]
+name = "freym-ui-preview"
+path = "src/ui_preview.rs"
+required-features = ["ui-preview"]
+
+[dependencies]
+gpui.workspace = true
+gpui_platform.workspace = true
+freym-ui.workspace = true
+freym-update = { path = "../freym-update" }
+
+[target.'cfg(target_os = "windows")'.dependencies]
+frame-windows = { path = "../frame-windows" }
+
+[build-dependencies]
+embed-resource = "=3.0.11"
+
+[lints]
+workspace = true

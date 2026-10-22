@@ -1,0 +1,16 @@
+{
+  "inputs": {
+    "geist-latin-wght-normal.woff2": "19f9c92546aa300c312235e3125af1b81394d8db9a4bc4a425cd5b641d2d54e1",
+    "geist-latin-ext-wght-normal.woff2": "824f485b5d26e2f2da3c2b236132ece1bc8e4e43373452950bb0e40548b4313f"
+  },
+  "outputs": {
+    "FreymLabSans-400.ttf": "8a42acd8df444ad0b593627680e3fb4d95e19d7c83822a0ae1f4e4baff604e3c",
+    "FreymLabSans-500.ttf": "0e2233524da9d8bbb096f4ee174fe780b4a72fefcaf493ebb9c9037f3f77a372",
+    "FreymLabSans-600.ttf": "72fc35aafd7082e37a2d3b978ba9ad87bf57467f58089d6b37dfb81bd32192ca"
+  },
+  "weights": [
+    400,
+    500,
+    600
+  ]
+}
