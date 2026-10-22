@@ -16,13 +16,10 @@ pub fn install_fonts(cx: &gpui::App) -> anyhow::Result<()> {
     ])
 }
 impl AssetSource for Assets {
-    fn load(&self, path: &str) -> anyhow::Result<Option<Cow<'static, [u8]>>> {
-        Ok(match path {
-            "atmosphere.png" => Some(Cow::Borrowed(include_bytes!("../assets/atmosphere.png"))),
-            _ => None,
-        })
+    fn load(&self, _: &str) -> anyhow::Result<Option<Cow<'static, [u8]>>> {
+        Ok(None)
     }
     fn list(&self, _: &str) -> anyhow::Result<Vec<SharedString>> {
-        Ok(vec!["atmosphere.png".into()])
+        Ok(Vec::new())
     }
 }
