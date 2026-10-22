@@ -1,4 +1,5 @@
 //! One native vector vocabulary, shared stroke weight and viewbox.
+//! Stroke paths are derived from Lucide (ISC); see NOTICE and LICENSES/Lucide.txt.
 use crate::ui::theme::{colors::Color, spacing::Layout};
 use gpui::{App, Hsla, IntoElement, RenderOnce, Svg, Window, prelude::*, px, svg};
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]

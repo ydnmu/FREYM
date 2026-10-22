@@ -2,10 +2,10 @@ FREYM Core (some source modules retain the Frame name)
 Copyright (C) 2026 FREYM contributors
 Project: https://github.com/ydnmu/FREYM
 
-Except where a file or third-party component states otherwise, this project's
-original source code, documentation and assets are licensed under the GNU General
-Public License as published by the Free Software Foundation, either version 3 of
-the License, or (at your option) any later version.
+Except for the third-party components listed below, this project's original
+source code, documentation and original assets are licensed under the GNU
+General Public License as published by the Free Software Foundation, either
+version 3 of the License, or (at your option) any later version.
 SPDX-License-Identifier: GPL-3.0-or-later
 
 This program is distributed in the hope that it will be useful, but WITHOUT ANY
@@ -18,11 +18,35 @@ provide Corresponding Source when required by the GPL. Keep existing individual
 and third-party credits; this collective notice does not replace their ownership.
 Git history records contributions but is not a substitute for legal notices.
 
-Third-party material retains its own licenses and copyright notices. In particular,
-crates/frame-windows/vendor/nv-codec-headers/nvEncodeAPI.h retains NVIDIA's notice;
-its adjacent PROVENANCE.json records the exact upstream revision and source. Dependencies
-resolved by Cargo.lock retain their respective licenses.
-Binary distributors must include applicable dependency notices as well.
+Third-party components retain their own copyright and license terms. The
+following list is the attribution record for material distributed in this
+repository; it does not replace the upstream notices.
+
+- NVIDIA nvEncodeAPI.h (MIT). Copyright (c) 2010-2024 NVIDIA Corporation.
+  Vendored at crates/frame-windows/vendor/nv-codec-headers/nvEncodeAPI.h;
+  the license text is retained verbatim in the header. Its adjacent
+  PROVENANCE.json records the exact upstream revision, tag and SHA-256.
+
+- GPUI input example (Apache-2.0). Copyright 2022 - 2025 Zed Industries, Inc.
+  Adapted in crates/freym-ui/src/input.rs from
+  https://github.com/zed-industries/zed/blob/eec3376016e83b79a574039fb66107d3801741f6/crates/gpui/examples/input.rs.
+  GPUI's package LICENSE-APACHE pointer resolves to Zed's root LICENSE-APACHE;
+  the exact text is included at LICENSES/GPUI-Apache-2.0.txt.
+
+- Lucide icons (ISC; Feather-derived icons MIT). Copyright (c) 2026 Lucide Icons
+  and Contributors; Feather-derived portions Copyright (c) 2013-present Cole
+  Bemis. Stroke icon paths in crates/freym-ui/src/ui/primitives/icon.rs are
+  derived from Lucide. The combined upstream license text is included at
+  LICENSES/Lucide.txt.
+
+- Geist font (SIL Open Font License 1.1, OFL-1.1). Copyright 2024 The Geist
+  Project Authors. The font is modified and renamed FreymLabSans; its copyright
+  and license are retained in
+  crates/freym-ui/assets/fonts/ui-lab/Geist-LICENSE.txt.
+
+Cargo dependencies resolved by Cargo.lock retain their respective licenses.
+Binary distributors must include applicable dependency notices; this source
+repository does not ship a generated dependency notice bundle.
 
 TRADEMARKS.md separately addresses project names and logos. This NOTICE does not
 add advertising, donation, mandatory UI credit, or other copyright restrictions

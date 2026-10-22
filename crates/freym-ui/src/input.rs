@@ -1,5 +1,6 @@
 // Adapted from the pinned official GPUI input example (Apache-2.0).
 // https://github.com/zed-industries/zed/blob/eec3376016e83b79a574039fb66107d3801741f6/crates/gpui/examples/input.rs
+// License text: LICENSES/GPUI-Apache-2.0.txt; attribution: NOTICE.
 use std::ops::Range;
 
 use gpui::{
