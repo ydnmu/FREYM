@@ -1,0 +1,153 @@
+//! Short native integration acceptance. Uses only an isolated evidence directory.
+use frame_contracts::*;
+use frame_runtime::recording_control::{EngineEventSink, RecordingControl};
+use frame_settings::{SettingsStore, model::*, validation::*};
+use std::{
+    path::PathBuf,
+    sync::{Arc, Mutex},
+    time::{Duration, Instant},
+};
+
+#[derive(Default)]
+struct Evidence(Mutex<Vec<EventEnvelope>>);
+impl EngineEventSink for Evidence {
+    fn publish(&self, event: EventEnvelope) {
+        self.0.lock().unwrap().push(event);
+    }
+}
+fn main() -> Result<(), Box<dyn std::error::Error>> {
+    #[cfg(windows)]
+    if std::env::args().any(|a| a == "--frame-mf-helper") {
+        std::process::exit(frame_windows::run_mf_helper());
+    }
+    let mut args = std::env::args_os().skip(1);
+    if args.next().as_deref() != Some(std::ffi::OsStr::new("--allow-screen-capture")) {
+        return Err(
+            "Requires --allow-screen-capture and a new absolute evidence directory.".into(),
+        );
+    }
+    let directory = PathBuf::from(args.next().ok_or("Missing evidence directory")?);
+    let exercise_av1_mute = args.next().as_deref() == Some(std::ffi::OsStr::new("--av1-mute"));
+    if !directory.is_absolute() {
+        return Err("Evidence directory must be absolute.".into());
+    }
+    std::fs::create_dir(&directory)?;
+    let snapshot = frame_runtime::discovery::snapshot()?;
+    let display = snapshot
+        .displays
+        .iter()
+        .find(|d| d.is_primary)
+        .ok_or("No primary display")?;
+    let routes = snapshot
+        .audio_sources
+        .iter()
+        .find(|s| s.kind == AudioSourceKind::Microphone && s.is_active)
+        .map(|s| {
+            vec![AudioRouteSelection {
+                controls: Default::default(),
+                source_id: s.id.clone(),
+                route: AudioRoute::MainMixAndSeparate,
+                muted: false,
+            }]
+        })
+        .unwrap_or_default();
+    let expected_tracks = if routes.is_empty() { 0 } else { 2 };
+    let config: RecordingConfiguration = RecordingRequest {
+        target: CaptureTarget::Display(display.id.clone()),
+        fps_mode: FpsMode::AutoMatchSource,
+        resolution: Resolution::Native,
+        quality: Quality::Standard,
+        encoder: EncoderPreference::Auto,
+        optimization: Some(RecordingOptimization {
+            automatic_quality: false,
+            codec: if exercise_av1_mute {
+                RecordingCodec::Av1
+            } else {
+                RecordingCodec::Auto
+            },
+            ..Default::default()
+        }),
+        audio_routes: routes,
+        camera: None,
+        show_cursor: true,
+        output: OutputSettings {
+            directory: directory.to_string_lossy().into_owned(),
+            file_stem: "Integration_{timestamp}".into(),
+        },
+    }
+    .into();
+    let caps = frame_runtime::settings::discover(&config, &RecorderState::Idle)?;
+    let report = validate_configuration(&config, &caps);
+    if !report.is_valid() {
+        return Err(format!("Preflight refused: {:?}", report.issues).into());
+    }
+    let mut document = SettingsDocument::new(config);
+    document.modes.video = SettingsMode::Advanced;
+    document.modes.audio = SettingsMode::Advanced;
+    let store = SettingsStore::in_directory(&directory);
+    let (document, _) =
+        store.commit(&document, 0, &caps, &RecorderState::Idle, ApplyTiming::Now)?;
+    assert_eq!(store.load_document()?.unwrap(), document);
+    let sink = Arc::new(Evidence::default());
+    let control = RecordingControl::new(sink.clone());
+    control.restore_routes(&document.configuration()?.request.audio_routes);
+    control.observe_sources(snapshot.audio_sources);
+    control.start_configuration(&document.configuration()?)?;
+    let deadline = Instant::now() + Duration::from_secs(30);
+    let mut recording_since = None;
+    let mut muted = false;
+    let mut restored = false;
+    loop {
+        let p = control.published();
+        match p.state {
+            RecorderState::Recording => {
+                let since = recording_since.get_or_insert_with(Instant::now);
+                if exercise_av1_mute && since.elapsed() >= Duration::from_secs(1) && !muted {
+                    for route in &document.configuration()?.request.audio_routes {
+                        control.update_mute(route.source_id.clone(), true)?;
+                    }
+                    muted = true;
+                }
+                if exercise_av1_mute && since.elapsed() >= Duration::from_secs(3) && !restored {
+                    for route in &document.configuration()?.request.audio_routes {
+                        control.update_mute(route.source_id.clone(), false)?;
+                    }
+                    restored = true;
+                }
+                if since.elapsed() >= Duration::from_secs(5) {
+                    control.stop()?;
+                }
+            }
+            RecorderState::Failed(error) => {
+                std::fs::write(
+                    directory.join("events.json"),
+                    serde_json::to_vec_pretty(&*sink.0.lock().unwrap())?,
+                )?;
+                return Err(format!("Native recording failed: {error:?}").into());
+            }
+            RecorderState::Idle if p.last_artifact.is_some() => {
+                let artifact = p.last_artifact.unwrap();
+                let integrity = frame_runtime::recording_health::verify_finalized(
+                    std::path::Path::new(&artifact.path),
+                )?;
+                std::fs::write(
+                    directory.join("events.json"),
+                    serde_json::to_vec_pretty(&*sink.0.lock().unwrap())?,
+                )?;
+                println!(
+                    "artifact={} expected_audio_tracks={} live_mute_exercised={} integrity={integrity:?}",
+                    artifact.path,
+                    expected_tracks,
+                    exercise_av1_mute && muted && restored
+                );
+                return Ok(());
+            }
+            _ => {}
+        }
+        if Instant::now() > deadline {
+            let _ = control.stop();
+            return Err("Native recording deadline exceeded.".into());
+        }
+        std::thread::sleep(Duration::from_millis(10));
+    }
+}

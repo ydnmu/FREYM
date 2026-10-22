@@ -1,0 +1,10 @@
+/target/
+/build/
+/test-results/
+__pycache__/
+*.pyc
+*.log
+*.profraw
+.DS_Store
+.env
+.env.*

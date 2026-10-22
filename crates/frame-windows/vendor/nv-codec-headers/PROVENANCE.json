@@ -1,0 +1,9 @@
+{
+  "file": "nvEncodeAPI.h",
+  "upstream": "https://github.com/FFmpeg/nv-codec-headers",
+  "revision": "e844e5b26f46bb77479f063029595293aa8f812d",
+  "tag": "n13.0.19.0",
+  "path": "include/ffnvcodec/nvEncodeAPI.h",
+  "sha256": "4fe4094541ef0f8a13249d97a8692dc5f835a6e9dd42eeadb3e2f7321d54dc7e",
+  "license": "NVIDIA copyright and license retained verbatim in nvEncodeAPI.h"
+}

@@ -1,0 +1,20 @@
+[package]
+name = "frame-studio"
+version.workspace = true
+license.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+publish.workspace = true
+
+[dependencies]
+frame-clock.workspace = true
+frame-encode.workspace = true
+frame-mux.workspace = true
+frame-metadata.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+png = "0.18"
+cpal = "=0.16.0"
+
+[lints]
+workspace = true

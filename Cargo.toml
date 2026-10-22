@@ -1,0 +1,54 @@
+[workspace]
+resolver = "2"
+members = [
+    "crates/frame-audio",
+    "crates/frame-capture",
+    "crates/frame-clock",
+    "crates/frame-contracts",
+    "crates/frame-core",
+    "crates/frame-encode",
+    "crates/frame-linux",
+    "crates/frame-macos",
+    "crates/frame-metadata",
+    "crates/frame-metrics",
+    "crates/frame-mux",
+    "crates/frame-runtime",
+    "crates/frame-settings",
+    "crates/frame-studio",
+    "crates/frame-windows",
+]
+default-members = ["crates/frame-runtime"]
+
+[workspace.package]
+version = "0.1.0"
+license = "GPL-3.0-or-later"
+edition = "2024"
+rust-version = "1.96"
+publish = false
+
+[workspace.dependencies]
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+frame-contracts = { path = "crates/frame-contracts" }
+frame-capture = { path = "crates/frame-capture" }
+frame-audio = { path = "crates/frame-audio" }
+frame-clock = { path = "crates/frame-clock" }
+frame-metadata = { path = "crates/frame-metadata" }
+frame-encode = { path = "crates/frame-encode" }
+frame-mux = { path = "crates/frame-mux" }
+frame-metrics = { path = "crates/frame-metrics" }
+frame-settings = { path = "crates/frame-settings" }
+frame-core = { path = "crates/frame-core" }
+frame-runtime = { path = "crates/frame-runtime" }
+
+[workspace.lints.rust]
+unsafe_code = "forbid"
+
+[workspace.lints.clippy]
+all = "warn"
+
+[profile.dev.package.frame-windows]
+opt-level = 2
+
+[profile.dev.package.miniz_oxide]
+opt-level = 2

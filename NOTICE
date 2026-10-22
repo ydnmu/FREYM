@@ -1,0 +1,29 @@
+FREYM Core (some source modules retain the Frame name)
+Copyright (C) 2026 FREYM contributors
+Project: https://github.com/ydnmu/FREYM
+
+Except where a file or third-party component states otherwise, this project's
+original source code, documentation and assets are licensed under the GNU General
+Public License as published by the Free Software Foundation, either version 3 of
+the License, or (at your option) any later version.
+SPDX-License-Identifier: GPL-3.0-or-later
+
+This program is distributed in the hope that it will be useful, but WITHOUT ANY
+WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+PARTICULAR PURPOSE. See LICENSE for the complete GNU General Public License.
+
+Preserve applicable copyright, authorship, license and warranty notices when
+redistributing, as required by the relevant licenses. Mark modified versions and
+provide Corresponding Source when required by the GPL. Keep existing individual
+and third-party credits; this collective notice does not replace their ownership.
+Git history records contributions but is not a substitute for legal notices.
+
+Third-party material retains its own licenses and copyright notices. In particular,
+crates/frame-windows/vendor/nv-codec-headers/nvEncodeAPI.h retains NVIDIA's notice;
+its adjacent PROVENANCE.json records the exact upstream revision and source. Dependencies
+resolved by Cargo.lock retain their respective licenses.
+Binary distributors must include applicable dependency notices as well.
+
+TRADEMARKS.md separately addresses project names and logos. This NOTICE does not
+add advertising, donation, mandatory UI credit, or other copyright restrictions
+beyond the applicable licenses. Accurate attribution does not imply endorsement.

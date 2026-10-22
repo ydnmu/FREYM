@@ -1,0 +1,46 @@
+[package]
+name = "frame-runtime"
+version.workspace = true
+license.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+publish.workspace = true
+
+[dependencies]
+frame-core.workspace = true
+frame-contracts.workspace = true
+frame-metrics.workspace = true
+frame-settings.workspace = true
+frame-mux.workspace = true
+frame-metadata.workspace = true
+
+serde_json.workspace = true
+chrono = { version = "0.4", default-features = false, features = ["clock"] }
+
+[target.'cfg(target_os = "linux")'.dependencies]
+frame-linux = { path = "../frame-linux" }
+frame-capture.workspace = true
+frame-audio.workspace = true
+frame-clock.workspace = true
+
+[target.'cfg(target_os = "windows")'.dependencies]
+frame-windows = { path = "../frame-windows" }
+frame-capture.workspace = true
+frame-audio.workspace = true
+frame-clock.workspace = true
+frame-encode.workspace = true
+serde.workspace = true
+
+[target.'cfg(target_os = "macos")'.dependencies]
+frame-macos = { path = "../frame-macos" }
+frame-capture.workspace = true
+frame-audio.workspace = true
+frame-clock.workspace = true
+frame-encode.workspace = true
+
+[lints]
+workspace = true
+
+[dev-dependencies]
+# Offline session-integrity fixtures use the existing encoder packet contracts.
+frame-encode.workspace = true
