@@ -92,10 +92,11 @@ fn diagnostics_report_is_produced_and_self_describing() {
     let report = frame_windows::application_audio_diagnostics()
         .expect("application audio session diagnostics must not fail on a Windows desktop");
     for expected in [
-        "Frame application audio session diagnostics (FRAME-0106A)",
+        "FREYM application audio session diagnostics",
         "read-only diagnostic snapshot",
         "captures no audio",
-        "FRAME-0106B",
+        "process-tree loopback",
+        "Windows build 20348",
         "not atomic",
         "not a live tracker",
         "A source ID is a live-session selection identity",
@@ -108,7 +109,8 @@ fn diagnostics_report_is_produced_and_self_describing() {
             "the diagnostics report must contain {expected:?}"
         );
     }
-    // The report never claims a capability this task does not implement.
+    // The report describes the read-only snapshot; it does not claim the snapshot
+    // itself captures audio or starts capture.
     for forbidden in [
         "per-application capture is implemented",
         "records audio",

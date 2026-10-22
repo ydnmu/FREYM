@@ -1,6 +1,6 @@
 //! Essential Windows end-to-end check with explicit capture authorization.
 //! cargo run -p frame-runtime --example metadata_recording --
-//!   --allow-screen-capture C:/FREYM/build/<evidence>/new.mkv
+//!   --allow-screen-capture <evidence-dir>/new.mkv
 #[cfg(target_os = "windows")]
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     if std::env::args_os()

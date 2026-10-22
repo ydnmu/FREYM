@@ -19,13 +19,14 @@
 //! - **It captures nothing.** No `IAudioClient`, no activation, no loopback, no PCM,
 //!   no volume or privacy change, no arbitrary process start. It reads session
 //!   metadata only.
-//! - **It does not implement per-application capture.** Enumerating a session is not
-//!   the same as capturing its audio, and it is not evidence that a later isolated
-//!   capture is possible. That boundary belongs to the deferred FRAME-0106B, whose
-//!   process-loopback activation and lifecycle have their own documented OS boundary.
-//! - **It enables no capability.** `EngineCapabilities::per_app_audio` stays false;
-//!   `AudioBackend` composes these sources with microphone endpoints, without adding
-//!   an IPC command or changing the wire schema.
+//! - **It does not capture audio.** Enumerating a session is not the same as
+//!   capturing its audio. Selected process-tree loopback is implemented in
+//!   `application_audio`; it is advertised only on Windows builds 20348 or later,
+//!   and that path has its own activation and lifecycle boundary.
+//! - **It enables no capability by itself.** `EngineCapabilities::per_app_audio`
+//!   is set from the OS build gate by the recording host; this snapshot neither
+//!   changes nor validates it. `AudioBackend` composes these sources with microphone
+//!   endpoints without adding an IPC command or changing the wire schema.
 //! - **An empty result is valid.** A successful snapshot with no sessions is a real
 //!   result, not proof that discovery works and not proof that sessions were missed.
 //!
@@ -1232,12 +1233,13 @@ pub(crate) const DEVICE_STATE_ACTIVE: u32 = 1;
 /// Renders the human-readable diagnostics report for one snapshot.
 fn render_diagnostics(snapshot: &ApplicationSessionSnapshot) -> String {
     let mut report = String::new();
-    report.push_str("Frame application audio session diagnostics (FRAME-0106A)\n\n");
+    report.push_str("FREYM application audio session diagnostics\n\n");
     for line in [
         "This is a read-only diagnostic snapshot of Windows application audio sessions.",
-        "It captures no audio, changes no system setting and starts no program. It does NOT",
-        "provide process-isolated audio capture: that boundary belongs to the deferred",
-        "FRAME-0106B and is not implemented.",
+        "It captures no audio, changes no system setting and starts no program. Selected",
+        "process-tree loopback is implemented by the application audio backend and is",
+        "advertised on Windows build 20348 or later; this snapshot does not start or",
+        "validate that capture path.",
         "",
         "The snapshot is not atomic. Each call enumerates again, and Windows performs these",
         "reads on live objects, so a session created, destroyed or moved between two reads",

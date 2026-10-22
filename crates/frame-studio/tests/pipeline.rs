@@ -150,7 +150,7 @@ fn recording_sidecar_maps_segment_origin_geometry_and_loss() {
     assert!(!metadata.truncated);
 }
 #[test]
-#[ignore = "Requires local FFmpeg; run with FREYM_STUDIO_TEST_DIR under C:/FREYM/build."]
+#[ignore = "Requires local FFmpeg; set FREYM_STUDIO_TEST_DIR to an evidence directory."]
 fn rendered_export_preserves_vfr_audio_and_originals() {
     let root =
         PathBuf::from(std::env::var_os("FREYM_STUDIO_TEST_DIR").expect("evidence directory"));

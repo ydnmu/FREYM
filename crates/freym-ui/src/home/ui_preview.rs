@@ -600,7 +600,11 @@ fn example_model(scene: Scene) -> AppModel {
         camera: None,
         show_cursor: true,
         output: OutputSettings {
-            directory: "C:\\FREYM\\build\\ui-preview\\example-recordings".into(),
+            directory: std::env::temp_dir()
+                .join("freym-ui-preview")
+                .join("example-recordings")
+                .to_string_lossy()
+                .into_owned(),
             file_stem: "Preview".into(),
         },
     });

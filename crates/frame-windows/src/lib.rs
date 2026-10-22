@@ -1,8 +1,10 @@
-//! Windows display capture, hardware H.264 encoding, selected microphone/process
-//! audio capture and source discovery. Native handles stay inside this crate.
-//! Desktop orchestration and container/audio processing live in their host/shared
-//! crates. Experimental window capture remains outside production admission; region capture copies a
-//! rectangle of an already captured display surface on the GPU (FRAME-0205).
+//! Windows display, region and eligible-window capture, hardware H.264 encoding,
+//! selected microphone/process audio capture and source discovery. Native handles
+//! stay inside this crate. Desktop orchestration and container/audio processing live
+//! in their host/shared crates. Window capture uses the isolated WGC helper for
+//! eligible SDR native windows; exclusive-fullscreen, injected game capture and HDR
+//! window capture remain unsupported. Region capture copies a rectangle of an already
+//! captured display surface on the GPU (FRAME-0205).
 use frame_contracts::{AudioSource, DisplayInfo, RecorderError, WindowInfo};
 #[allow(unsafe_code)]
 #[cfg(target_os = "windows")]

@@ -1351,17 +1351,17 @@ fn validate_request(target: &CaptureTarget, fps: FpsMode) -> Result<DisplayId, R
         CaptureTarget::Display(display_id) => display_id.clone(),
         CaptureTarget::Window(_) => {
             return Err(not_implemented_error(
-                "Window capture is not implemented by this display capture proof.".to_string(),
+                "Window capture is not supported by this display-only capture path.".to_string(),
             ));
         }
         CaptureTarget::Region(_) => {
             return Err(not_implemented_error(
-                "Region capture is not implemented by this display capture proof.".to_string(),
+                "Region capture is not supported by this display-only capture path.".to_string(),
             ));
         }
         CaptureTarget::Game(_) => {
             return Err(not_implemented_error(
-                "Game capture is not implemented by this display capture proof.".to_string(),
+                "Game capture is not supported by this display-only capture path.".to_string(),
             ));
         }
     };
@@ -1374,7 +1374,7 @@ fn validate_request(target: &CaptureTarget, fps: FpsMode) -> Result<DisplayId, R
                 )));
             }
             return Err(not_implemented_error(format!(
-                "A fixed {value} FPS request is not implemented by this display capture proof; automatic source-matched FPS follows desktop updates instead."
+                "A fixed {value} FPS request is not supported by this display-only capture path; automatic source-matched FPS follows desktop updates instead."
             )));
         }
     }

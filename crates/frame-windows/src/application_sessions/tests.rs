@@ -1160,8 +1160,8 @@ fn the_report_is_honest_about_its_limits() {
     for expected in [
         "read-only diagnostic snapshot",
         "captures no audio",
-        "does NOT",
-        "FRAME-0106B",
+        "process-tree loopback",
+        "Windows build 20348",
         "not atomic",
         "not a live tracker",
         "A source ID is a live-session selection identity",

@@ -21,12 +21,12 @@
 //! the active render endpoints and prints them, including why each record was skipped or
 //! left unattributed and the resource bounds the pass enforced. What it does **not** do:
 //! it captures no audio, opens no stream, toggles no system setting, starts no program and
-//! writes no file. It is a diagnostic snapshot, not a recorder and not the deferred
-//! FRAME-0106B process-isolated capture.
+//! writes no file. It is a diagnostic snapshot, not a recorder and not the separate
+//! process-loopback capture backend.
 //!
 //! An empty session list is a valid result and is reported as such; it is not proof that
-//! discovery works, and a populated list is not proof that per-application isolation is
-//! possible.
+//! discovery works, and a populated list is not proof that process-loopback capture will
+//! succeed.
 
 #[cfg(target_os = "windows")]
 fn main() -> std::process::ExitCode {
