@@ -1,0 +1,16 @@
+[package]
+name = "frame-settings"
+version.workspace = true
+license.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+publish.workspace = true
+
+[dependencies]
+frame-contracts.workspace = true
+# Versioned local settings document (FRAME-0207); both already resolved in the workspace.
+serde.workspace = true
+serde_json.workspace = true
+
+[lints]
+workspace = true

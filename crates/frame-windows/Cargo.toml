@@ -1,0 +1,107 @@
+[package]
+name = "frame-windows"
+version.workspace = true
+license.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+publish.workspace = true
+
+[dependencies]
+frame-metadata.workspace = true
+frame-contracts.workspace = true
+frame-capture.workspace = true
+frame-audio.workspace = true
+frame-encode.workspace = true
+frame-clock.workspace = true
+frame-metrics.workspace = true
+# FRAME-0205: the pure canonical region coordinate rules. The region module validates a
+# requested rectangle with them instead of restating the display/physical-pixel rules, and
+# this crate adds no edge back into frame-settings.
+frame-settings.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+
+# Official Microsoft bindings for the documented Win32 display, DPI and
+# display-configuration APIs used by FRAME-0101 and FRAME-0102. Windows-only and
+# feature-minimal: no version is pinned above the workspace's existing
+# windows-sys 0.61.2 resolution.
+[target.'cfg(target_os = "windows")'.dependencies]
+flate2 = "1.1.10"
+# ADRs 0005/0007: official COM bindings for capture and audio.
+# Existing enumeration retains windows-sys; no handwritten COM vtables.
+windows-core = "0.61.2"
+libloading = "=0.7.4"
+windows = { version = "0.61.3", features = [
+    "Foundation",
+    "Wdk_System_SystemServices",
+    "Win32_System_SystemInformation",
+    "Win32_Devices_FunctionDiscovery",
+    "Win32_Foundation",
+    "Win32_Graphics_Direct3D",
+    "Win32_Graphics_Direct3D_Fxc",
+    "Win32_Graphics_Direct3D11",
+    "Win32_Graphics_DirectComposition",
+    "Win32_Graphics_Dxgi",
+    "Win32_Graphics_Dxgi_Common",
+    "Win32_Graphics_Gdi",
+    "Win32_Security",
+    "Win32_System_JobObjects",
+    "Win32_Media_Audio",
+    "Win32_Media_KernelStreaming",
+    "Win32_Media_MediaFoundation",
+    "Win32_Media_Multimedia",
+    "Win32_Media_MediaFoundation",
+    "Win32_Security",
+    "Win32_System_Com",
+    "Win32_System_Com_StructuredStorage",
+    "Win32_System_Ole",
+    "Win32_System_Performance",
+    "Win32_System_Threading",
+    "Win32_System_Diagnostics_ToolHelp",
+    "Win32_System_Variant",
+    "Win32_UI_WindowsAndMessaging",
+    "Win32_UI_Shell_PropertiesSystem",
+    "Graphics_Capture",
+    "Graphics_DirectX_Direct3D11",
+    "Win32_System_WinRT_Graphics_Capture",
+    "Win32_System_WinRT_Direct3D11",
+] }
+windows-sys = { version = "0.61.2", features = [
+    "Win32_Storage_FileSystem",
+    "Win32_Devices_Display",
+    "Win32_Foundation",
+    "Win32_Graphics_Dwm",
+    "Win32_Graphics_Gdi",
+    # FRAME-0205: the region probe's known-content pattern window is an ordinary GDI
+    # window; it needs the module handle of this process and nothing else new.
+    "Win32_System_LibraryLoader",
+    "Win32_System_Threading",
+    "Win32_System_Diagnostics_ToolHelp",
+    "Win32_UI_HiDpi",
+    "Win32_UI_Input_KeyboardAndMouse",
+    "Win32_UI_WindowsAndMessaging",
+] }
+
+[target.'cfg(target_os = "windows")'.build-dependencies]
+cc = "1"
+
+# FRAME-0104 diagnostic example: structured JSONL evidence, not handwritten JSON.
+[dev-dependencies]
+serde.workspace = true
+serde_json.workspace = true
+# FRAME-0205: the region probe writes one single-video Matroska file through the accepted
+# container path, so its 2-second crop can be decoded by an independent decoder. The same
+# crate the desktop host already uses; it adds no package to the lock file.
+frame-mux.workspace = true
+# FRAME-0207: the encoder example is the real consumer of the recording policy and of the
+# versioned settings document. The workspace member is already resolved; no new package.
+# FRAME-0107F: the real libopus decoder the encoded-audio probe reads its own written
+# packets back with. The same exact version frame-encode already locks; no new resolution.
+opus = "=0.4.0"
+
+[lints.rust]
+unsafe_code = 'deny'
+unsafe_op_in_unsafe_fn = 'deny'
+
+[lints.clippy]
+all = 'warn'

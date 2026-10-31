@@ -1,0 +1,67 @@
+FREYM
+Copyright (C) 2026 FREYM contributors
+Project: https://github.com/ydnmu/FREYM
+
+Except where a file or third-party component states otherwise, this project's
+original source code, documentation and assets are licensed under the GNU General
+Public License as published by the Free Software Foundation, either version 3 of
+the License, or (at your option) any later version.
+SPDX-License-Identifier: GPL-3.0-or-later
+
+This program is distributed in the hope that it will be useful, but WITHOUT ANY
+WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A
+PARTICULAR PURPOSE. See LICENSE for the complete GNU General Public License.
+
+Preserve applicable copyright, authorship, license and warranty notices when
+redistributing, as required by the relevant licenses. Mark modified versions and
+provide Corresponding Source when required by the GPL. Keep existing individual
+and third-party credits; this collective notice does not replace their ownership.
+Git history records contributions but is not a substitute for legal notices.
+
+Third-party material retains its own licenses and copyright notices. In particular,
+crates/frame-windows/vendor/nv-codec-headers/nvEncodeAPI.h retains NVIDIA's notice;
+its adjacent README records the exact upstream revision and source. Dependencies
+resolved by Cargo.lock retain their respective licenses.
+Binary distributors must include applicable dependency notices as well.
+
+crates/freym-ui/src/input.rs is adapted from the GPUI input example at Zed
+revision eec3376016e83b79a574039fb66107d3801741f6 under Apache-2.0. Its source
+attribution is retained; native distributions include GPUI's exact Apache license
+text in third-party/cargo/gpui-0.2.2/referenced/LICENSE-APACHE (or the matching
+locked GPUI version directory recorded in third-party/inventory.json).
+
+TRADEMARKS.md separately addresses project names and logos. This NOTICE does not
+add advertising, donation, mandatory UI credit, or other copyright restrictions
+beyond the applicable licenses. Accurate attribution does not imply endorsement.
+
+The response_spring calculation in crates/freym-ui/src/ui/theme/motion.rs is
+adapted from Longbridge GPUI Kit under Apache-2.0. Copyright 2024 - 2026 Longbridge
+<https://longbridge.com>. The exact source revision, modifications and upstream
+license are retained in crates/freym-ui/third_party/gpui-kit-motion/.
+
+RollingText in crates/freym-ui/src/ui/primitives/rolling_text.rs is adapted from
+Zeron, https://github.com/zeronsh/zeron, revision
+dbb639be372157a66603e2f0462d3702d3d33503. Source and modification details are in
+crates/freym-ui/third_party/zeron-rolling-text/README.md. Its MIT notice follows:
+
+MIT License
+
+Copyright (c) 2026 Wing
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.

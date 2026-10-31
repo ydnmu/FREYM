@@ -1,0 +1,46 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright (C) 2026 FREYM contributors
+# Manual packaging of an unsigned Windows development build. This is not a
+# release pipeline: it has no tag or release trigger, creates no GitHub release,
+# signs nothing and ships no updater. The script stages a matching source ZIP
+# with actual source bytes; this workflow uploads neither binary nor source.
+name: Windows package check
+
+on:
+  workflow_dispatch:
+    inputs:
+      skip_installer:
+        description: 'Package the portable ZIP only (no NSIS installer)'
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+jobs:
+  windows-development-build:
+    runs-on: windows-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: dtolnay/rust-toolchain@ebb3d1676050bfd0971c36c1e215b5751473994d # 1.96.0
+      - name: Install native installer compiler
+        if: ${{ !inputs.skip_installer }}
+        shell: pwsh
+        run: choco install nsis --version=3.11 --yes --no-progress
+      # Native GPUI/launcher packaging. No Tauri/WebView2 bundler is invoked.
+      # Nothing is published: the artifacts stay inside the run.
+      - name: Package the Windows development build
+        shell: pwsh
+        run: |
+          if ('${{ inputs.skip_installer }}' -eq 'true') {
+            ./scripts/package-windows.ps1 -SkipInstaller
+          } else {
+            ./scripts/package-windows.ps1
+          }
+      - name: Report the produced artifacts
+        shell: pwsh
+        run: |
+          $output = Join-Path $PWD 'test-results/windows-devbuild'
+          if (-not (Test-Path $output)) { throw "no packaging output directory: $output" }
+          Get-ChildItem $output -File | ForEach-Object { Write-Host ("{0}  {1} bytes" -f $_.Name, $_.Length) }

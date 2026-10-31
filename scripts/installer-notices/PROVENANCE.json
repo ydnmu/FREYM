@@ -1,0 +1,27 @@
+{
+  "schema": "frame-installer-components/1",
+  "nsis": {
+    "version": "3.11",
+    "archive": "https://github.com/tauri-apps/binary-releases/releases/download/nsis-3.11/nsis-3.11.zip",
+    "archive_sha1_from_tauri_bundler": "ef7ff767e5cbd9edd22add3a32c9b8f4500bb10d",
+    "notices": {
+      "NSIS-COPYING": "e7dd514003ab96cb3ddccbc028fe5c795fccf57dc41f21cfb9d4dd16ead23bf5",
+      "NSISdl-License.txt": "326e587f36ca58e14bd09cca153f9e69f1c5ed701189aa47d2d0627af7e16280",
+      "NSIS-ModernUI2-License.txt": "d5957bd99460eb21148bd2695eeb5a3718abae6b118040a4678926da3f4cfbc0"
+    }
+  },
+  "tauri_nsis_utils": {
+    "release": "nsis_tauri_utils-v0.5.3",
+    "binary": "https://github.com/tauri-apps/nsis-tauri-utils/releases/download/nsis_tauri_utils-v0.5.3/nsis_tauri_utils.dll",
+    "binary_sha1_from_tauri_bundler": "75197fee3c6a814fe035788d1c34ead39349b860",
+    "source_commit": "13d9edd27b69310e108d6fbd49f90992f8a05390",
+    "source": "https://github.com/tauri-apps/nsis-tauri-utils/tree/13d9edd27b69310e108d6fbd49f90992f8a05390",
+    "source_manifest": "https://raw.githubusercontent.com/tauri-apps/nsis-tauri-utils/13d9edd27b69310e108d6fbd49f90992f8a05390/crates/nsis-tauri-utils/Cargo.toml",
+    "source_dependencies": "nsis-plugin-api (same workspace license), semver 1.0, windows-sys 0.61.2; the package inventory must contain resolved notices for semver 1.0 and windows-sys 0.61.2",
+    "notices": {
+      "LICENSE_MIT": "1c1020fa10a6bf318717e82c911bcc54ebdfb9bb280460ae332bcb2f82f57fbe",
+      "LICENSE_APACHE-2.0": "0d542e0c8804e39aa7f37eb00da5a762149dc682d7829451287e11b938e94594"
+    }
+  },
+  "scope": "License provenance for the pinned NSIS 3.11 distribution and separately identified Tauri plugin. The current native-installer.nsi uses standard NSIS, MUI2 and LZMA; it does not invoke the Tauri plugin or install WebView2. These retained license texts do not establish notice completeness or acceptance of a newly built installer; verify its actual compiler and embedded payload separately."
+}

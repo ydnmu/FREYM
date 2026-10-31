@@ -1,0 +1,26 @@
+/target/
+test-results/
+*.log
+.DS_Store
+__pycache__/
+*.pyc
+/.cargo/config.toml
+
+# Local release outputs, recordings, credentials and private source snapshots.
+/build/
+/backups/
+/archive/
+/worktrees/
+/release-artifacts/
+/output/
+*.exe
+*.dll
+*.pdb
+*.zip
+*.7z
+*.profraw
+*.mkv
+*.mp4
+.env
+.env.*
+!.env.example

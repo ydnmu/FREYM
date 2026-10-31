@@ -1,0 +1,60 @@
+[package]
+name = "frame-runtime"
+version.workspace = true
+license.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+publish.workspace = true
+
+[dependencies]
+frame-core.workspace = true
+frame-contracts.workspace = true
+# FRAME-0202: the host publishes its own telemetry from the recording control loop. The
+# accepted frame-metrics sampler turns the real cumulative counters of the live session
+# into rates over a real elapsed window, so an unmeasured FPS is reported as absent
+# instead of as a zero. It is a pure, allocation-free workspace crate.
+frame-metrics.workspace = true
+frame-settings.workspace = true
+frame-mux.workspace = true
+frame-metadata.workspace = true
+
+# Native dialogs select recording outputs and an explicit recovery source/destination.
+serde_json.workspace = true
+chrono = { version = "0.4", default-features = false, features = ["clock"] }
+
+[target.'cfg(target_os = "linux")'.dependencies]
+frame-linux = { path = "../frame-linux" }
+frame-capture.workspace = true
+frame-audio.workspace = true
+frame-clock.workspace = true
+
+# FRAME-0111A: the accepted Windows backend owns native display, microphone and
+# application-session discovery. It is a Windows-only dependency so the other
+# platforms keep their existing foundation snapshot, and the app never compiles
+# Windows APIs into a non-Windows build.
+#
+# FRAME-0110A-VIDEO: the desktop host library binds that capture session, the
+# accepted hardware encoder and the accepted single-video writer into one reusable
+# video-only recording owner, so the clock, the encoder contracts and the container
+# writer are Windows-only dependencies as well.
+[target.'cfg(target_os = "windows")'.dependencies]
+frame-windows = { path = "../frame-windows" }
+frame-capture.workspace = true
+frame-audio.workspace = true
+frame-clock.workspace = true
+frame-encode.workspace = true
+serde.workspace = true
+
+[target.'cfg(target_os = "macos")'.dependencies]
+frame-macos = { path = "../frame-macos" }
+frame-capture.workspace = true
+frame-audio.workspace = true
+frame-clock.workspace = true
+frame-encode.workspace = true
+
+[lints]
+workspace = true
+
+[dev-dependencies]
+# Offline session-integrity fixtures use the existing encoder packet contracts.
+frame-encode.workspace = true

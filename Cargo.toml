@@ -1,0 +1,86 @@
+[workspace]
+resolver = "2"
+members = [
+    "crates/frame-audio",
+    "crates/frame-capture",
+    "crates/frame-clock",
+    "crates/frame-contracts",
+    "crates/frame-core",
+    "crates/frame-encode",
+    "crates/frame-linux",
+    "crates/frame-macos",
+    "crates/frame-metadata",
+    "crates/frame-metrics",
+    "crates/frame-mux",
+    "crates/frame-runtime",
+    "crates/frame-settings",
+    "crates/frame-windows",
+    "crates/freym-app",
+    "crates/freym-platform",
+    "crates/freym-ui",
+    "crates/freym-update",
+]
+default-members = ["crates/freym-app"]
+
+[workspace.package]
+version = "0.1.0-alpha.2"
+license = "GPL-3.0-or-later"
+edition = "2024"
+rust-version = "1.96"
+publish = false
+
+[workspace.dependencies]
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+frame-contracts = { path = "crates/frame-contracts" }
+frame-capture = { path = "crates/frame-capture" }
+frame-audio = { path = "crates/frame-audio" }
+frame-clock = { path = "crates/frame-clock" }
+frame-metadata = { path = "crates/frame-metadata" }
+frame-encode = { path = "crates/frame-encode" }
+frame-mux = { path = "crates/frame-mux" }
+frame-metrics = { path = "crates/frame-metrics" }
+frame-settings = { path = "crates/frame-settings" }
+frame-core = { path = "crates/frame-core" }
+frame-runtime = { path = "crates/frame-runtime" }
+freym-ui = { path = "crates/freym-ui" }
+gpui = { git = "https://github.com/zed-industries/zed", rev = "eec3376016e83b79a574039fb66107d3801741f6", default-features = false }
+gpui_platform = { git = "https://github.com/zed-industries/zed", rev = "eec3376016e83b79a574039fb66107d3801741f6", features = ["font-kit", "wayland", "x11"] }
+
+[workspace.lints.rust]
+unsafe_code = "forbid"
+
+[workspace.lints.clippy]
+all = "warn"
+
+# Keep the desktop's development preview responsive without changing the build
+# profile of unrelated workspace packages. These are the measured PNG hot paths.
+[profile.dev.package.frame-windows]
+opt-level = 2
+
+[profile.dev.package.miniz_oxide]
+opt-level = 2
+
+# Keep native layout/paint hot paths optimized in the interactive development
+# build. Application code retains fast incremental builds and full debug info.
+[profile.dev.package.gpui]
+opt-level = 2
+
+[profile.dev.package.taffy]
+opt-level = 2
+
+[profile.dev.package.freym-ui]
+opt-level = 1
+
+# Bound the two largest UI CodeView contributions to MSVC test PDBs. Retain
+# source lines/backtraces; development builds and other packages keep their
+# existing debug information.
+[profile.test.package.freym-ui]
+debug = "limited"
+
+[profile.test.package.gpui]
+debug = "limited"
+
+# Correct destination alpha in the pinned Windows renderer; other GPUI crates stay pinned.
+[patch."https://github.com/zed-industries/zed"]
+gpui_windows = { path = "vendor/gpui_windows" }

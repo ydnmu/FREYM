@@ -1,0 +1,44 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+# Copyright (C) 2026 FREYM contributors
+name: Bug report
+description: Report a reproducible defect in Frame (FREYM).
+title: '[bug] '
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Describe what you reproduced and what your evidence shows. Keep reports
+        honest about their limits. Do **not** attach private recordings, desktop
+        captures or other private media — describe them instead, and keep logs
+        free of personal content.
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened
+      description: Expected behaviour versus actual behaviour.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Reproduction steps
+      description: Exact steps, commands and options that reproduce the problem.
+    validations:
+      required: true
+  - type: textarea
+    id: platform
+    attributes:
+      label: Platform
+      description: Windows version and build, GPU and driver, display and mode, and the app build commit or development ZIP manifest.
+    validations:
+      required: true
+  - type: textarea
+    id: checks
+    attributes:
+      label: Relevant checks and results
+      description: Tests or verification commands you ran and their results.
+  - type: textarea
+    id: limits
+    attributes:
+      label: Honest limits
+      description: What your evidence does not establish — hardware scope, runs not done, workarounds used.

@@ -1,0 +1,27 @@
+[package]
+name = "freym-update"
+version.workspace = true
+license.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+publish.workspace = true
+
+[dependencies]
+serde.workspace = true
+serde_json.workspace = true
+anyhow = "1"
+base64 = "0.22"
+ed25519-dalek = "2.2"
+semver = "1"
+sha2 = "0.10"
+tempfile = "3"
+ureq = { version = "3.1", default-features = false, features = ["rustls"] }
+url = "2"
+dirs-next = "2"
+rfd = "0.16"
+
+[build-dependencies]
+embed-resource = "=3.0.11"
+
+[lints]
+workspace = true

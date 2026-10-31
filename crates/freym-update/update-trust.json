@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "manifestUrl": null,
+  "publicKeys": [],
+  "allowedOrigins": [],
+  "channel": "stable",
+  "package": "disabled"
+}

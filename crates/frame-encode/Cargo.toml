@@ -1,0 +1,18 @@
+[package]
+name = "frame-encode"
+version.workspace = true
+license.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+publish.workspace = true
+
+[dependencies]
+serde.workspace = true
+frame-audio.workspace = true
+frame-contracts.workspace = true
+frame-clock.workspace = true
+# Exact-pinned safe wrapper; the default build compiles bundled libopus (no runtime ffmpeg).
+opus = "=0.4.0"
+
+[lints]
+workspace = true

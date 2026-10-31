@@ -1,0 +1,6 @@
+* text=auto eol=lf
+*.png binary
+*.ico binary
+
+# Preserve the pinned vendor header verbatim, including its trailing blank line.
+crates/frame-windows/vendor/nv-codec-headers/nvEncodeAPI.h whitespace=-blank-at-eof

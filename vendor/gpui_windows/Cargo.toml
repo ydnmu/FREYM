@@ -1,0 +1,129 @@
+[package]
+name = "gpui_windows"
+version = "0.1.0"
+edition.workspace = true
+publish.workspace = true
+license = "Apache-2.0"
+
+[lints]
+workspace = true
+
+[lib]
+path = "src/gpui_windows.rs"
+doctest = false
+
+[features]
+default = ["gpui/default"]
+test-support = ["gpui/test-support"]
+screen-capture = ["gpui/screen-capture", "scap"]
+
+[dependencies]
+gpui.workspace = true
+
+[target.'cfg(target_os = "windows")'.dependencies]
+accesskit.workspace = true
+accesskit_windows.workspace = true
+anyhow.workspace = true
+collections.workspace = true
+dunce.workspace = true
+etagere.workspace = true
+futures.workspace = true
+gpui_util.workspace = true
+image.workspace = true
+itertools.workspace = true
+log.workspace = true
+parking_lot.workspace = true
+rand.workspace = true
+raw-window-handle.workspace = true
+scheduler.workspace = true
+smallvec.workspace = true
+uuid = { workspace = true, features = ["v5"] }
+windows = { workspace = true, features = [
+    "Data_Xml_Dom",
+    "UI_Notifications",
+    "UI_ViewManagement",
+    "Wdk_System_SystemServices",
+    "Win32_Graphics_Direct3D11",
+    "Win32_Graphics_Direct3D_Fxc",
+    "Win32_Graphics_DirectComposition",
+    "Win32_Graphics_DirectManipulation",
+    "Win32_Graphics_DirectWrite",
+    "Win32_Graphics_Dwm",
+    "Win32_Graphics_Dxgi_Common",
+    "Win32_Graphics_Hlsl",
+    "Win32_Media",
+    "Win32_Security_Credentials",
+    "Win32_Storage_Packaging_Appx",
+    "Win32_System_DataExchange",
+    "Win32_System_Diagnostics_Debug",
+    "Win32_System_Memory",
+    "Win32_System_Performance",
+    "Win32_System_StationsAndDesktops",
+    "Win32_System_SystemInformation",
+    "Win32_System_SystemServices",
+    "Win32_UI_Controls",
+    "Win32_UI_HiDpi",
+    "Win32_UI_Input_Ime",
+    "Win32_UI_Input_Pointer",
+] }
+windows-core.workspace = true
+windows-numerics = "0.3"
+windows-registry.workspace = true
+
+[target.'cfg(target_os = "windows")'.dependencies.scap]
+workspace = true
+optional = true
+
+[target.'cfg(target_os = "windows")'.build-dependencies]
+windows-registry.workspace = true
+
+[package.metadata.cargo-shear]
+ignored = ["scap"]
+
+[workspace]
+resolver = "2"
+
+[workspace.package]
+edition = "2024"
+publish = false
+
+[workspace.lints.rust]
+"unexpected_cfgs" = { "level" = "allow" }
+
+[workspace.lints.clippy]
+"dbg_macro" = "deny"
+"todo" = "deny"
+"declare_interior_mutable_const" = "deny"
+"redundant_clone" = "deny"
+"disallowed_methods" = "deny"
+"style" = { "level" = "allow", "priority" = -1 }
+"type_complexity" = "allow"
+"let_underscore_future" = "allow"
+"single_range_in_vec_init" = "allow"
+"too_many_arguments" = "allow"
+"large_enum_variant" = "allow"
+"nonminimal_bool" = "allow"
+
+[workspace.dependencies]
+"accesskit" = { "version" = "0.24.0", "features" = ["enumn"] }
+"accesskit_windows" = "0.34"
+"anyhow" = "1.0.86"
+"collections" = { "version" = "0.1.0", "git" = "https://github.com/zed-industries/zed", "rev" = "eec3376016e83b79a574039fb66107d3801741f6" }
+"dunce" = "1.0"
+"etagere" = "0.2"
+"futures" = "0.3.34"
+"gpui" = { "default-features" = false, "git" = "https://github.com/zed-industries/zed", "rev" = "eec3376016e83b79a574039fb66107d3801741f6" }
+"gpui_util" = { "git" = "https://github.com/zed-industries/zed", "rev" = "eec3376016e83b79a574039fb66107d3801741f6" }
+"image" = { "version" = "0.25.1", "default-features" = false, "features" = ["bmp", "dds", "exr", "ff", "gif", "hdr", "ico", "jpeg", "png", "pnm", "qoi", "rayon", "tga", "tiff", "webp"] }
+"itertools" = "0.14.0"
+"log" = { "version" = "0.4", "default-features" = false, "features" = ["std"] }
+"parking_lot" = "0.12.1"
+"rand" = { "version" = "0.9", "default-features" = false, "features" = ["std", "std_rng", "os_rng"] }
+"raw-window-handle" = "0.6"
+"scap" = { "git" = "https://github.com/zed-industries/scap", "rev" = "4afea48c3b002197176fb19cd0f9b180dd36eaac", "default-features" = false, "package" = "zed-scap", "version" = "0.0.8-zed" }
+"scheduler" = { "git" = "https://github.com/zed-industries/zed", "rev" = "eec3376016e83b79a574039fb66107d3801741f6" }
+"smallvec" = { "version" = "1.6", "features" = ["union", "const_new"] }
+"uuid" = { "version" = "1.1", "features" = ["serde"] }
+"windows" = { "version" = "0.62", "features" = ["Win32_Foundation", "Win32_Graphics_Gdi", "Win32_Security", "Win32_Storage_FileSystem", "Win32_System_Com", "Win32_System_Com_StructuredStorage", "Win32_System_IO", "Win32_System_LibraryLoader", "Win32_System_Ole", "Win32_System_Threading", "Win32_System_Variant", "Win32_UI_Shell", "Win32_UI_Shell_Common", "Win32_UI_Shell_PropertiesSystem", "Win32_UI_WindowsAndMessaging"] }
+"windows-core" = "0.62"
+"windows-registry" = "0.6.0"

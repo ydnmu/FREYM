@@ -1,0 +1,13 @@
+name: Native Windows build
+on:
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  native-windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - uses: dtolnay/rust-toolchain@ebb3d1676050bfd0971c36c1e215b5751473994d
+      - run: pwsh -NoProfile -File scripts/run-task.ps1 cargo build --locked --release -p freym-app --bin freym -p freym-update --bin freym-launcher --jobs 2

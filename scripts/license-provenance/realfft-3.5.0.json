@@ -1,0 +1,30 @@
+{
+  "package": "realfft",
+  "version": "3.5.0",
+  "distribution_classification": "required runtime Cargo dependency",
+  "cargo_lock_checksum": "f821338fddb99d089116342c46e9f1fbf3828dba077674613e734e01d6ea8677",
+  "published_crate": {
+    "manifest_path": "Cargo.toml.orig",
+    "manifest_sha256": "d72ddbadf9bb55ed21ae973ac97f0bb4e8df2064af628c54b802b2c7d764c8de",
+    "vcs_commit_from_cargo_vcs_info": "d0d4eee0525fd27c96c8a046d6d107acd5ed84a6",
+    "declaration": "name = realfft; version = 3.5.0; authors = HEnquist; license = MIT"
+  },
+  "upstream": {
+    "manifest_url": "https://raw.githubusercontent.com/HEnquist/realfft/d0d4eee0525fd27c96c8a046d6d107acd5ed84a6/Cargo.toml",
+    "manifest_sha256": "d72ddbadf9bb55ed21ae973ac97f0bb4e8df2064af628c54b802b2c7d764c8de",
+    "tree_url": "https://api.github.com/repos/HEnquist/realfft/git/trees/d0d4eee0525fd27c96c8a046d6d107acd5ed84a6?recursive=1",
+    "tree_truncated": false,
+    "legal_file_paths": []
+  },
+  "full_license_text": {
+    "source": null,
+    "sha256": null,
+    "status": "unresolved",
+    "reason": "The exact published crate and pinned upstream tree declare MIT but contain no full text or project-specific copyright notice. The SPDX MIT template and another project by the same author do not themselves establish an applicable full notice for this exact release."
+  },
+  "gate": "blocked if realfft 3.5.0 is present in the resolved distribution graph; frame-audio now disables rubato's FFT feature and uses its sinc resampler, so the current locked Windows graph excludes realfft",
+  "resolution": {
+    "method": "dependency excluded from the Windows graph by rubato 5.0.0 default-features = false and Async sinc normalization",
+    "verification": "Cargo.lock and cargo metadata for the current tree must contain no realfft package; the collector still fails closed if it reappears"
+  }
+}
